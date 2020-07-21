@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaGithubAlt, FaPlus, FaSpinner, FaDownload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
@@ -31,6 +31,10 @@ export default class Main extends Component {
         }
     }
 
+    handleDownload = (clone_url) => {
+        window.open(clone_url);
+    };
+
     handleInputChange = (e) => {
         this.setState({ newRepo: e.target.value });
     };
@@ -43,6 +47,8 @@ export default class Main extends Component {
 
         const data = {
             name: response.data.full_name,
+            language: response.data.language,
+            download_url: response.data.clone_url,
         };
 
         this.setState({
@@ -82,13 +88,27 @@ export default class Main extends Component {
                     {repositories.map((repository) => (
                         <li key={repository.name}>
                             <span>{repository.name}</span>
-                            <Link
-                                to={`/repository/${encodeURIComponent(
-                                    repository.name
-                                )}`}
-                            >
-                                Detalhes
-                            </Link>
+                            <strong>
+                                <span key={String(repository.language)}>
+                                    {repository.language}
+                                </span>
+                            </strong>
+                            <div>
+                                <FaDownload
+                                    onClick={() => {
+                                        this.handleDownload(
+                                            repository.download_url
+                                        );
+                                    }}
+                                />
+                                <Link
+                                    to={`/repository/${encodeURIComponent(
+                                        repository.name
+                                    )}`}
+                                >
+                                    Detalhes
+                                </Link>
+                            </div>
                         </li>
                     ))}
                 </List>

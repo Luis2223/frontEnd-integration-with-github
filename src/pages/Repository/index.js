@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import api from '../../services/api';
 
-import { Loading, Owner } from './styles';
+import {
+    Loading,
+    Owner,
+    IssueList,
+    ChangeButton,
+    ContainerButtons,
+} from './styles';
 import Container from '../../components/Container';
 
 export default class Repository extends Component {
@@ -17,7 +23,7 @@ export default class Repository extends Component {
 
     state = {
         repository: {},
-        issues: [],
+        commits: [],
         loading: true,
     };
 
@@ -26,25 +32,20 @@ export default class Repository extends Component {
 
         const repoName = decodeURIComponent(match.params.repository);
 
-        const [repository, issues] = await Promise.all([
+        const [repository, commits] = await Promise.all([
             await api.get(`/repos/${repoName}`),
-            await api.get(`/repos/${repoName}/issues`, {
-                params: {
-                    state: 'open',
-                    per_page: 5,
-                },
-            }),
+            await api.get(`/repos/${repoName}/commits`),
         ]);
 
         this.setState({
             loading: false,
             repository: repository.data,
-            issues: issues.data,
+            commits: commits.data,
         });
     }
 
     render() {
-        const { repository, issues, loading } = this.state;
+        const { repository, commits, loading } = this.state;
 
         if (loading) {
             return <Loading>Carregando</Loading>;
@@ -60,6 +61,39 @@ export default class Repository extends Component {
                     <h1>{repository.name}</h1>
                     <p>{repository.description}</p>
                 </Owner>
+                <ContainerButtons>
+                    <div>
+                        <ChangeButton>Commits</ChangeButton>
+                        <ChangeButton disabled>Issues</ChangeButton>
+                    </div>
+                </ContainerButtons>
+                <IssueList>
+                    {commits.map((commit) => (
+                        <li key={String(commit.node_id)}>
+                            <img
+                                src={
+                                    commit.author
+                                        ? commit.author.avatar_url
+                                        : 'https://icon-library.net//images/icon-profile/icon-profile-20.jpg'
+                                }
+                                alt={commit.commit.author.name}
+                            />
+                            <div>
+                                <strong>
+                                    <a href={commit.html_url}>
+                                        {commit.commit.message}
+                                    </a>
+                                    {/* {commit.labels.map((label) => (
+                                        <span key={String(label.id)}>
+                                            {label.name}
+                                        </span>
+                                    ))} */}
+                                </strong>
+                                <p>{commit.commit.author.name}</p>
+                            </div>
+                        </li>
+                    ))}
+                </IssueList>
             </Container>
         );
     }

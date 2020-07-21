@@ -12,6 +12,7 @@ export const Form = styled.form`
 
     input {
         flex: 1;
+        background: rgba(247, 247, 247, 0.9);
         border: 1px solid #eee;
         padding: 10px 15px;
         border-radius: 4px;
@@ -32,7 +33,7 @@ export const SubmitButton = styled.button.attrs((props) => ({
     type: 'submit',
     disabled: props.loading,
 }))`
-    background: #7159c1;
+    background: #ffb16e;
     border: 0;
     padding: 0 15px;
     margin-left: 10px;
@@ -72,8 +73,24 @@ export const List = styled.ul`
         }
 
         a {
-            color: #7159c1;
+            color: #ffb16e;
             text-decoration: none;
+        }
+
+        strong {
+            flex: 1;
+            margin-left: 15px;
+
+            span {
+                background: #eee;
+                color: #333;
+                border-radius: 2px;
+                font-size: 12px;
+                font-weight: 600;
+                height: 20px;
+                padding: 3px 4px;
+                margin-left: 10px;
+            }
         }
     }
 `;

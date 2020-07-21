@@ -7,7 +7,7 @@
 * [React Icons](https://react-icons.github.io/react-icons/)
 * [React Router Dom](https://www.npmjs.com/package/react-router-dom)
 * [Styled Components](https://styled-components.com/)
-* [Axios]([https://github.com/axios/axios](https://github.com/axios/axios)
+* [Axios](https://github.com/axios/axios)
 
 ### Development
 
